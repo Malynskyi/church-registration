@@ -14,68 +14,98 @@ body {
 .registration-container {
     max-width: 700px;
     margin: 40px auto;
-    padding: 30px;
+    padding: 20px;
 
-    background: rgba(255, 255, 255, 0.22);
+    background: transparent;
 
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    border: 1px solid rgba(255, 255, 255, 0.3);
-
-    border-radius: 25px;
-
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.2);
+    border: none;
+    box-shadow: none;
 }
 
 .registration-title {
     text-align: center;
-    color: #1f1f1f;
-    margin-bottom: 15px;
+    color: white;
+
     font-size: 32px;
     line-height: 1.2;
+
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.7);
+
+    margin-bottom: 15px;
+}
+
+.conference-verse {
+    text-align: center;
+
+    color: #d4af37;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+
+    margin-bottom: 30px;
 }
 
 .section-title {
-    margin-top: 25px;
     text-align: center;
-    color: #222;
+
+    color: white;
+
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+
+    margin-top: 30px;
+    margin-bottom: 15px;
 }
 
 .form-input {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
+
     margin-bottom: 12px;
 
-    border: 1px solid rgba(32, 32, 69, 0.5);
-    border-radius: 10px;
-
-    font-size: 16px;
     box-sizing: border-box;
 
-    background: rgba(255, 255, 255, 0.75);
+    border-radius: 14px;
 
-    color: #222;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    background: rgba(255, 255, 255, 0.25);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    color: white;
+    font-size: 16px;
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+
+    border-color: #d4af37;
+
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
 .submit-button {
     width: 100%;
+
     padding: 14px;
 
     border: none;
-    border-radius: 10px;
+    border-radius: 14px;
 
     background: #2563eb;
+
     color: white;
 
     font-size: 16px;
+    font-weight: 600;
+
     cursor: pointer;
 
     margin-top: 20px;
@@ -87,33 +117,37 @@ body {
     background: #1d4ed8;
 }
 
-.conference-image {
-    width: 100%;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    display: block;
-}
+.info-box {
+    background: rgba(255, 255, 255, 0.18);
 
-.conference-verse {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    border-radius: 16px;
+
+    padding: 18px;
+
+    margin-bottom: 20px;
+
     text-align: center;
 
-    font-size: 22px;
+    color: white;
+
     font-weight: 600;
 
-    color: #8b6b2e;
-
-    margin-top: -5px;
-    margin-bottom: 25px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 768px) {
     .registration-container {
-        margin: 20px;
-        padding: 20px;
+        margin: 15px;
+        padding: 15px;
     }
 
     .registration-title {
-        font-size: 28px;
+        font-size: 26px;
     }
 
     .conference-verse {
