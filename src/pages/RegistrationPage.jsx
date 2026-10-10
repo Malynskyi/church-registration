@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import conferenceImage from "../assets/conference.jpg";
+
 
 import { Link } from "react-router-dom";
 
@@ -61,15 +61,13 @@ export default function RegistrationPage() {
 
     return (
         <div className="registration-container">
-            {conferenceImage}
+
 
             <h1 className="registration-title">
                 Регистрация на семейную конференцию
             </h1>
 
-            <Link to="/login">
-                Открыть админ-панель
-            </Link>
+
 
             <FatherForm
                 father={family.father}

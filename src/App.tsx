@@ -14,7 +14,7 @@ function App() {
         />
 
         <Route
-          path="/login"
+          path="/family-admin-2026"
           element={<LoginPage />}
         />
 

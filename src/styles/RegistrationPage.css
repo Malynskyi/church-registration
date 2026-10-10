@@ -4,9 +4,15 @@ body {
     font-family: Arial, sans-serif;
 }
 
+body {
+    background: linear-gradient(135deg,
+            #f5f7fa,
+            #e4ecfb);
+}
+
 .registration-container {
     max-width: 700px;
-    margin: 50px auto;
+    margin: 40px auto;
     background: white;
     padding: 30px;
     border-radius: 20px;
