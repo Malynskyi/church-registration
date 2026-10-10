@@ -24,6 +24,17 @@ export default function ChildrenForm({
         }));
     };
 
+    const removeChild = (index) => {
+        const updatedChildren = children.filter(
+            (_, i) => i !== index
+        );
+
+        setFamily((prev) => ({
+            ...prev,
+            children: updatedChildren,
+        }));
+    };
+
     return (
         <>
             <h2 className="section-title">Дети</h2>
@@ -40,24 +51,61 @@ export default function ChildrenForm({
             </p>
 
             {children.map((child, index) => (
-                <input
+                <div
                     key={index}
-                    className="form-input"
-                    type="number"
-                    min="0"
-                    max="18"
-                    placeholder={`Возраст ребенка ${index + 1}`}
-                    value={child}
-                    onChange={(e) =>
-                        updateChild(index, e.target.value)
-                    }
-                />
+                    style={{
+                        display: "flex",
+                        gap: "10px",
+                        alignItems: "center",
+                        marginBottom: "10px",
+                    }}
+                >
+                    <input
+                        className="form-input"
+                        type="number"
+                        min="0"
+                        max="18"
+                        placeholder={`Возраст ребенка ${index + 1}`}
+                        value={child}
+                        onChange={(e) =>
+                            updateChild(index, e.target.value)
+                        }
+                        style={{ marginBottom: 0 }}
+                    />
+
+                    {children.length > 1 && (
+                        <button
+                            type="button"
+                            onClick={() => removeChild(index)}
+                            style={{
+                                background: "#ef4444",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "8px",
+                                padding: "10px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            ❌
+                        </button>
+                    )}
+                </div>
             ))}
 
             <button
                 type="button"
-                className="submit-button"
                 onClick={addChild}
+                style={{
+                    background: "#f3f4f6",
+                    color: "#333",
+                    border: "1px solid #ccc",
+                    marginTop: "15px",
+                    marginBottom: "25px",
+                    width: "100%",
+                    padding: "14px",
+                    borderRadius: "12px",
+                    cursor: "pointer",
+                }}
             >
                 ➕ Добавить ребенка
             </button>
