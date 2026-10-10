@@ -64,7 +64,7 @@ export default function RegistrationPage() {
             {conferenceImage}
 
             <h1 className="registration-title">
-                Church Family Registration
+                Регистрация на семейную конференцию
             </h1>
 
             <Link to="/login">
