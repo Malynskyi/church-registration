@@ -1,13 +1,14 @@
 body {
     margin: 0;
-    background: #f4f4f5;
     font-family: Arial, sans-serif;
-}
 
-body {
-    background: linear-gradient(135deg,
-            #f5f7fa,
-            #e4ecfb);
+    background-image: url("../assets/conference-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    min-height: 100vh;
 }
 
 .registration-container {
@@ -15,54 +16,71 @@ body {
     margin: 40px auto;
     padding: 30px;
 
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.22);
 
-    border-radius: 20px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
-    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 25px;
+
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .registration-title {
     text-align: center;
-    color: #222;
-    margin-bottom: 30px;
+    color: #1f1f1f;
+    margin-bottom: 15px;
     font-size: 32px;
     line-height: 1.2;
 }
 
 .section-title {
     margin-top: 25px;
-    color: #333;
+    text-align: center;
+    color: #222;
 }
 
 .form-input {
     width: 100%;
     padding: 12px;
     margin-bottom: 12px;
-    border: 1px solid #202045;
+
+    border: 1px solid rgba(32, 32, 69, 0.5);
     border-radius: 10px;
+
     font-size: 16px;
     box-sizing: border-box;
-    background-color: white;
+
+    background: rgba(255, 255, 255, 0.75);
+
     color: #222;
 }
 
 .form-input:focus {
     outline: none;
     border-color: #2563eb;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
 }
 
 .submit-button {
     width: 100%;
     padding: 14px;
+
     border: none;
     border-radius: 10px;
+
     background: #2563eb;
     color: white;
+
     font-size: 16px;
     cursor: pointer;
+
+    margin-top: 20px;
+
+    transition: 0.2s;
 }
 
 .submit-button:hover {
@@ -76,10 +94,29 @@ body {
     display: block;
 }
 
-body {
-    background-image: url("../assets/conference-bg.jpg");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+.conference-verse {
+    text-align: center;
+
+    font-size: 22px;
+    font-weight: 600;
+
+    color: #8b6b2e;
+
+    margin-top: -5px;
+    margin-bottom: 25px;
+}
+
+@media (max-width: 768px) {
+    .registration-container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .registration-title {
+        font-size: 28px;
+    }
+
+    .conference-verse {
+        font-size: 18px;
+    }
 }

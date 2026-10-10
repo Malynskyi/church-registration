@@ -67,6 +67,10 @@ export default function RegistrationPage() {
                 Регистрация на семейную конференцию
             </h1>
 
+            <p className="conference-verse">
+                «А я и дом мой будем служить Господу»
+            </p>
+
 
 
             <FatherForm
