@@ -71,6 +71,8 @@ export default function RegistrationPage() {
                 «А я и дом мой будем служить Господу»
             </p>
 
+            {conferenceImage}
+
 
 
             <FatherForm
