@@ -39,16 +39,22 @@ export default function ChildrenForm({
         <>
             <h2 className="section-title">Дети</h2>
 
-            <p
+            <div
                 style={{
-                    color: "#666",
-                    marginBottom: "15px",
-                    fontStyle: "italic",
+                    background: "#eef4ff",
+                    border: "1px solid #3b82f6",
+                    borderRadius: "12px",
+                    padding: "15px",
+                    marginBottom: "20px",
+                    textAlign: "center",
+                    color: "#1e40af",
+                    fontWeight: "600",
                 }}
             >
-                Мы позаботимся о ваших детях. Пожалуйста,
-                укажите количество и возраст детей.
-            </p>
+                👶 Мы позаботимся о ваших детях во время конференции.
+                <br />
+                Пожалуйста, укажите количество и возраст детей.
+            </div>
 
             {children.map((child, index) => (
                 <div
