@@ -2,7 +2,10 @@ const [families, setFamilies] = useState([]);
 const [search, setSearch] = useState("");
 const totalFamilies = families.length;
 
-const totalAdults = totalFamilies * 2;
+const totalAdults = families.reduce(
+    (total, family) => total + (family.adults || 1),
+    0
+);
 
 const totalChildren = families.reduce(
     (total, family) => total + family.children.length,
@@ -73,13 +76,6 @@ return (
             <p>Взрослых: {totalAdults}</p>
             <p>Детей: {totalChildren}</p>
             <p>Всего людей: {totalPeople}</p>
-
-            <input
-                className="form-input"
-                placeholder="Поиск по фамилии"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-            />
         </div>
 
         <Link to="/">← Вернуться к регистрации</Link>
@@ -106,16 +102,15 @@ return (
                 </p>
 
                 <p>
-                    ✅ Всего участников:{" "}
-                    {(family.adults || 1) +
-                        (family.children?.length || 0)}
+                    ✅ Всего участников: {(family.adults || 1) + (family.children?.length || 0)}
                 </p>
 
                 <p>
-                    📅 Дата регистрации:{" "}
-                    {new Date(
-                        family.created_at
-                    ).toLocaleString()}
+                    📅 Дата регистрации:
+                    {" "}
+                    {family.created_at
+                        ? new Date(family.created_at).toLocaleString()
+                        : "-"}
                 </p>
 
                 <p>Возраст детей:</p>
