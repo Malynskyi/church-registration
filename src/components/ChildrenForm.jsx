@@ -99,6 +99,7 @@ export default function ChildrenForm({
                         type="number"
                         min="0"
                         max="18"
+                        required
                         placeholder={`Возраст ребенка ${index + 1}`}
                         value={child}
                         onChange={(e) =>

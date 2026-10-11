@@ -27,6 +27,11 @@ export default function RegistrationPage() {
             return;
         }
 
+        if (family.children.some((child) => child === "")) {
+            alert("Укажите возраст всех детей");
+            return;
+        }
+
         try {
             const response = await api.post(
                 "/api/families",
