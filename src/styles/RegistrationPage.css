@@ -281,3 +281,65 @@ html {
     width: 22px;
     height: 22px;
 }
+
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 999;
+}
+
+.modal {
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 25px;
+
+    width: 90%;
+    max-width: 400px;
+
+    text-align: center;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.cancel-button,
+.confirm-button {
+    flex: 1;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    cursor: pointer;
+}
+
+.cancel-button {
+    background: #e5e7eb;
+}
+
+.confirm-button {
+    background: #2563eb;
+    color: white;
+}
