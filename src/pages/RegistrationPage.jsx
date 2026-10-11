@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-
+import conferencePoster from "../assets/conference-poster.jpg";
 
 import { Link } from "react-router-dom";
 
@@ -70,6 +70,14 @@ export default function RegistrationPage() {
             <p className="conference-verse">
                 «А я и дом мой будем служить Господу»
             </p>
+
+            {conferencePoster}
+
+            <div className="conference-info">
+                📅 17.10.2026 • 11:00
+                <br />
+                📍 Fulda, Zieherweg 14
+            </div>
 
 
 
