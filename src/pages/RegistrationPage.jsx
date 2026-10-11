@@ -17,40 +17,42 @@ export default function RegistrationPage() {
     const [family, setFamily] = useState(initialFamily);
 
     const handleSubmit = async () => {
-        if (
-            !family.father.firstName ||
-            !family.father.lastName ||
-            !family.mother.firstName ||
-            !family.mother.lastName
-        ) {
-            alert("Заполните все обязательные поля");
-            return;
-        }
 
         if (family.children.some((child) => child === "")) {
             alert("Укажите возраст всех детей");
             return;
         }
 
+
         try {
+            const familyToSend = {
+                ...family,
+
+                father: {
+                    firstName: "",
+                    lastName: "",
+                    phone: family.phone || "",
+                },
+
+                mother: {
+                    firstName: "",
+                    lastName: "",
+                    phone: "",
+                },
+            };
+
             const response = await api.post(
                 "/api/families",
-                family
+                familyToSend
             );
 
             alert(response.data.message);
 
             setFamily({
-                father: {
-                    firstName: "",
-                    lastName: "",
-                    phone: "",
-                },
-                mother: {
-                    firstName: "",
-                    lastName: "",
-                },
-                children: [""],
+                adults: 1,
+                children: [],
+                phone: "",
+                wantsContact: false,
             });
             window.scrollTo({
                 top: 0,
