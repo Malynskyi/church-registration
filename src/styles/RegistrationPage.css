@@ -285,30 +285,37 @@ html {
 
 .modal-overlay {
     position: fixed;
-    inset: 0;
 
-    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.45);
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    z-index: 999;
+    z-index: 9999;
 }
 
 .modal {
     background: white;
 
-    border-radius: 20px;
-
-    padding: 25px;
-
     width: 90%;
     max-width: 400px;
 
+    border-radius: 24px;
+
+    padding: 25px;
+
     text-align: center;
 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
 }
 
 .modal h2 {
