@@ -143,18 +143,6 @@ export default function RegistrationPage() {
             </div>
 
 
-            <input
-                className="form-input"
-                type="tel"
-                placeholder="📱 Контактный телефон (необязательно)"
-                value={family.phone || ""}
-                onChange={(e) =>
-                    setFamily((prev) => ({
-                        ...prev,
-                        phone: e.target.value,
-                    }))
-                }
-            />
 
             {showConfirm && (
                 <div className="confirm-card">
@@ -200,44 +188,7 @@ export default function RegistrationPage() {
             >
                 Зарегистрировать семью
             </button>
-            {showConfirm && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <h2>✅ Подтвердить регистрацию</h2>
 
-                        <p>
-                            Взрослые: {family.adults}
-                        </p>
-
-                        <p>
-                            Дети: {family.children.length}
-                        </p>
-
-                        <p>
-                            Всего участников: {family.adults + family.children.length}
-                        </p>
-
-                        <div className="modal-buttons">
-                            <button
-                                className="cancel-button"
-                                onClick={() => setShowConfirm(false)}
-                            >
-                                Назад
-                            </button>
-
-                            <button
-                                className="confirm-button"
-                                onClick={() => {
-                                    setShowConfirm(false);
-                                    handleSubmit();
-                                }}
-                            >
-                                Подтвердить
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {showSuccess && (
                 <div className="modal-overlay">
