@@ -77,6 +77,10 @@ export default function RegistrationPage() {
                 📍 Fulda, Zieherweg 14
             </div>
 
+            <a href="#poster">
+                📖 Подробнее о конференции
+            </a>
+
 
 
             <FatherForm
@@ -101,7 +105,9 @@ export default function RegistrationPage() {
                 Зарегистрировать семью
             </button>
 
-            <h2 className="poster-title">
+            <h2
+                id="poster"
+                className="poster-title">
                 Подробнее о конференции
             </h2>
 
@@ -112,6 +118,6 @@ export default function RegistrationPage() {
             />
 
 
-        </div>
+        </div >
     );
 }

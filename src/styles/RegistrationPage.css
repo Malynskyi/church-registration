@@ -193,3 +193,26 @@ body {
 
     color: #333;
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+.poster-link {
+    display: block;
+
+    text-align: center;
+
+    margin-top: 15px;
+    margin-bottom: 25px;
+
+    color: #2563eb;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.poster-link:hover {
+    text-decoration: underline;
+}
