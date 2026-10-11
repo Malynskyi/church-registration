@@ -145,14 +145,7 @@ export default function RegistrationPage() {
                 {family.adults + family.children.length}
             </div>
 
-            <label
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    marginBottom: "20px",
-                }}
-            >
+            <label className="contact-option">
                 <input
                     type="checkbox"
                     checked={family.wantsContact}
@@ -164,7 +157,7 @@ export default function RegistrationPage() {
                     }
                 />
 
-                📞 Связаться со мной
+                <span>📞 Оставить номер телефона</span>
             </label>
 
             {family.wantsContact && (

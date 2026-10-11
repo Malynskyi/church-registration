@@ -265,3 +265,19 @@ html {
 
     margin: 20px 0;
 }
+
+.contact-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 20px 0;
+
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.contact-option input {
+    width: 22px;
+    height: 22px;
+}
