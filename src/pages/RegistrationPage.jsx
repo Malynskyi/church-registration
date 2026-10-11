@@ -16,10 +16,16 @@ import { initialFamily } from "../data/initialFamily";
 export default function RegistrationPage() {
     const [family, setFamily] = useState(initialFamily);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleSubmit = async () => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
 
         if (family.children.some((child) => child === "")) {
             alert("Укажите возраст всех детей");
+            setIsSubmitting(false);
             return;
         }
 
@@ -60,8 +66,7 @@ export default function RegistrationPage() {
             });
 
         } catch (error) {
-            console.error(error);
-
+            setIsSubmitting(false);
             alert("Ошибка при отправке данных");
         }
     };
@@ -187,8 +192,11 @@ export default function RegistrationPage() {
             <button
                 className="submit-button"
                 onClick={handleSubmit}
+                disabled={isSubmitting}
             >
-                Зарегистрировать семью
+                {isSubmitting
+                    ? "Регистрация..."
+                    : "Зарегистрировать семью"}
             </button>
 
             <h2
