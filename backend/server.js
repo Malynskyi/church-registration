@@ -30,13 +30,13 @@ app.post("/api/families", async (req, res) => {
       VALUES ($1,$2,$3,$4,$5,$6,$7)
       `,
             [
-                family.father.firstName,
-                family.father.lastName,
-                family.father.phone,
+                "",
+                "",
+                family.phone || "",
 
-                family.mother.firstName,
-                family.mother.lastName,
-                family.mother.phone,
+                "",
+                "",
+                "",
 
                 JSON.stringify(family.children),
             ]

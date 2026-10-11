@@ -126,6 +126,48 @@ export default function RegistrationPage() {
                 setFamily={setFamily}
             />
 
+            <div className="total-participants">
+                ✅ Всего участников:{" "}
+                {family.adults + family.children.length}
+            </div>
+
+            <label
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    marginBottom: "20px",
+                }}
+            >
+                <input
+                    type="checkbox"
+                    checked={family.wantsContact}
+                    onChange={(e) =>
+                        setFamily((prev) => ({
+                            ...prev,
+                            wantsContact: e.target.checked,
+                        }))
+                    }
+                />
+
+                📞 Связаться со мной
+            </label>
+
+            {family.wantsContact && (
+                <input
+                    className="form-input"
+                    type="tel"
+                    placeholder="Номер телефона"
+                    value={family.phone}
+                    onChange={(e) =>
+                        setFamily((prev) => ({
+                            ...prev,
+                            phone: e.target.value,
+                        }))
+                    }
+                />
+            )}
+
             <input
                 className="form-input"
                 type="tel"
@@ -139,18 +181,6 @@ export default function RegistrationPage() {
                 }
             />
 
-            <textarea
-                className="form-input"
-                placeholder="💬 Комментарий (необязательно)"
-                rows="4"
-                value={family.comment || ""}
-                onChange={(e) =>
-                    setFamily((prev) => ({
-                        ...prev,
-                        comment: e.target.value,
-                    }))
-                }
-            />
 
             <button
                 className="submit-button"
