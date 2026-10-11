@@ -16,16 +16,11 @@ export default function RegistrationPage() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [showConfirm, setShowConfirm] = useState(false);
+
     const handleSubmit = async () => {
         if (isSubmitting) return;
 
-        const confirmed = window.confirm(
-            "Вы уверены, что хотите зарегистрировать семью?"
-        );
-
-        if (!confirmed) {
-            return;
-        }
 
         setIsSubmitting(true);
 
@@ -191,13 +186,48 @@ export default function RegistrationPage() {
 
             <button
                 className="submit-button"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
+                onClick={() => setShowConfirm(true)}
             >
-                {isSubmitting
-                    ? "Регистрация..."
-                    : "Зарегистрировать семью"}
+                Зарегистрировать семью
             </button>
+            {showConfirm && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h2>✅ Подтвердить регистрацию</h2>
+
+                        <p>
+                            Взрослые: {family.adults}
+                        </p>
+
+                        <p>
+                            Дети: {family.children.length}
+                        </p>
+
+                        <p>
+                            Всего участников: {family.adults + family.children.length}
+                        </p>
+
+                        <div className="modal-buttons">
+                            <button
+                                className="cancel-button"
+                                onClick={() => setShowConfirm(false)}
+                            >
+                                Назад
+                            </button>
+
+                            <button
+                                className="confirm-button"
+                                onClick={() => {
+                                    setShowConfirm(false);
+                                    handleSubmit();
+                                }}
+                            >
+                                Подтвердить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <h2
                 id="poster"
