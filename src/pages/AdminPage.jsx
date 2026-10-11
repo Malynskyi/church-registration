@@ -100,67 +100,39 @@ export default function AdminPage() {
             <br />
             <br />
 
-            {families
-                .filter((family) =>
-                    family.father_last_name
-                        ?.toLowerCase()
-                        .includes(search.toLowerCase())
-                )
-                .map((family) => (
-                    <div
-                        key={family.id}
-                        style={{
-                            border: "1px solid #ddd",
-                            borderRadius: "10px",
-                            padding: "15px",
-                            marginBottom: "15px",
-                        }}
-                    >
-                        <h3>{family.father_last_name}</h3>
-
-                        <p>
-                            Отец: {family.father_first_name}
-                        </p>
-
-                        <p>
-                            Телефон: {family.father_phone}
-                        </p>
-
-                        <p>
-                            Мать: {family.mother_first_name}
-                        </p>
-
-                        <p>
-                            Дата регистрации:{" "}
-                            {new Date(family.created_at).toLocaleString()}
-                        </p>
-
-                        <p>
-                            Детей: {family.children?.length || 0}
-                        </p>
-
-                        <p>
-                            Возраст детей:
-                        </p>
-
-                        <ul>
-                            {family.children?.map((age, index) => (
-                                <li key={index}>
-                                    {age} лет
-                                </li>
-                            ))}
-                        </ul>
 
 
-                        <button
-                            className="submit-button"
-                            onClick={() => deleteFamily(family.id)}
-                        >
-                            Удалить семью
-                        </button>
-                    </div>
+
+            <p>
+                Дата регистрации:{" "}
+                {new Date(family.created_at).toLocaleString()}
+            </p>
+
+            <p>
+                Детей: {family.children?.length || 0}
+            </p>
+
+            <p>
+                Возраст детей:
+            </p>
+
+            <ul>
+                {family.children?.map((age, index) => (
+                    <li key={index}>
+                        {age} лет
+                    </li>
                 ))}
+            </ul>
+
+
+            <button
+                className="submit-button"
+                onClick={() => deleteFamily(family.id)}
+            >
+                Удалить семью
+            </button>
         </div>
-    );
+    )
 }
+
 
