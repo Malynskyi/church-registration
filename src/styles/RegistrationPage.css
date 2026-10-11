@@ -365,3 +365,15 @@ html {
 
     text-align: center;
 }
+
+
+.address-link {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.address-link:hover {
+    color: #a58136;
+    text-decoration: underline;
+}

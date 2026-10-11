@@ -124,7 +124,14 @@ export default function RegistrationPage() {
             <div className="conference-info">
                 📅 17.10.2026 • 11:00
                 <br />
-                📍 Fulda, Zieherweg 14
+                <a
+                    href="https://www.google.com/maps/search/?api=1&query=Zieherser+Weg+14%2C+Fulda%2C+Germany"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="address-link"
+                >
+                    📍 Fulda, Zieherser Weg 14
+                </a>
             </div>
 
             <a href="#poster">
