@@ -18,6 +18,8 @@ export default function RegistrationPage() {
 
     const [showConfirm, setShowConfirm] = useState(false);
 
+    const [showSuccess, setShowSuccess] = useState(false);
+
     const handleSubmit = async () => {
         if (isSubmitting) return;
 
@@ -53,7 +55,7 @@ export default function RegistrationPage() {
                 familyToSend
             );
 
-            alert(response.data.message);
+            setShowSuccess(true);
             setIsSubmitting(false);
 
             setFamily({
@@ -225,6 +227,25 @@ export default function RegistrationPage() {
                                 Подтвердить
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {showSuccess && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h2>✅ Спасибо!</h2>
+
+                        <p>
+                            Ваша семья успешно зарегистрирована.
+                        </p>
+
+                        <button
+                            className="confirm-button"
+                            onClick={() => setShowSuccess(false)}
+                        >
+                            Отлично
+                        </button>
                     </div>
                 </div>
             )}
