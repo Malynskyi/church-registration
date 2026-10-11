@@ -71,12 +71,6 @@ export default function RegistrationPage() {
                 «А я и дом мой будем служить Господу»
             </p>
 
-            <img
-                src={conferencePoster}
-                alt="Постер семейной конференции"
-                className="conference-poster"
-            />
-
             <div className="conference-info">
                 📅 17.10.2026 • 11:00
                 <br />
@@ -106,6 +100,18 @@ export default function RegistrationPage() {
             >
                 Зарегистрировать семью
             </button>
+
+            <h2 className="poster-title">
+                Подробнее о конференции
+            </h2>
+
+            <img
+                src={conferencePoster}
+                alt="Постер семейной конференции"
+                className="conference-poster"
+            />
+
+
         </div>
     );
 }
