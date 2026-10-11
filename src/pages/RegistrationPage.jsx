@@ -142,35 +142,6 @@ export default function RegistrationPage() {
                 {family.adults + family.children.length}
             </div>
 
-            <label className="contact-option">
-                <input
-                    type="checkbox"
-                    checked={family.wantsContact}
-                    onChange={(e) =>
-                        setFamily((prev) => ({
-                            ...prev,
-                            wantsContact: e.target.checked,
-                        }))
-                    }
-                />
-
-                <span>📞 Оставить номер телефона</span>
-            </label>
-
-            {family.wantsContact && (
-                <input
-                    className="form-input"
-                    type="tel"
-                    placeholder="Номер телефона"
-                    value={family.phone}
-                    onChange={(e) =>
-                        setFamily((prev) => ({
-                            ...prev,
-                            phone: e.target.value,
-                        }))
-                    }
-                />
-            )}
 
             <input
                 className="form-input"
@@ -184,6 +155,43 @@ export default function RegistrationPage() {
                     }))
                 }
             />
+
+            {showConfirm && (
+                <div className="confirm-card">
+                    <h3>✅ Подтвердить регистрацию</h3>
+
+                    <p>
+                        Взрослые: {family.adults}
+                    </p>
+
+                    <p>
+                        Дети: {family.children.length}
+                    </p>
+
+                    <p>
+                        Всего участников: {family.adults + family.children.length}
+                    </p>
+
+                    <div className="modal-buttons">
+                        <button
+                            className="cancel-button"
+                            onClick={() => setShowConfirm(false)}
+                        >
+                            Отмена
+                        </button>
+
+                        <button
+                            className="confirm-button"
+                            onClick={() => {
+                                setShowConfirm(false);
+                                handleSubmit();
+                            }}
+                        >
+                            Подтвердить
+                        </button>
+                    </div>
+                </div>
+            )}
 
 
             <button
