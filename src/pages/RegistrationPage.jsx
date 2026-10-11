@@ -121,20 +121,35 @@ export default function RegistrationPage() {
             </a>
 
 
-
-            <FatherForm
-                father={family.father}
-                setFamily={setFamily}
-            />
-
-            <MotherForm
-                mother={family.mother}
-                setFamily={setFamily}
-            />
-
             <ChildrenForm
                 children={family.children}
                 setFamily={setFamily}
+            />
+
+            <input
+                className="form-input"
+                type="tel"
+                placeholder="📱 Контактный телефон (необязательно)"
+                value={family.phone || ""}
+                onChange={(e) =>
+                    setFamily((prev) => ({
+                        ...prev,
+                        phone: e.target.value,
+                    }))
+                }
+            />
+
+            <textarea
+                className="form-input"
+                placeholder="💬 Комментарий (необязательно)"
+                rows="4"
+                value={family.comment || ""}
+                onChange={(e) =>
+                    setFamily((prev) => ({
+                        ...prev,
+                        comment: e.target.value,
+                    }))
+                }
             />
 
             <button
