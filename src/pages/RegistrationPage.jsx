@@ -71,7 +71,11 @@ export default function RegistrationPage() {
                 «А я и дом мой будем служить Господу»
             </p>
 
-            {conferencePoster}
+            <img
+                src={conferencePoster}
+                alt="Постер семейной конференции"
+                className="conference-poster"
+            />
 
             <div className="conference-info">
                 📅 17.10.2026 • 11:00

@@ -161,15 +161,13 @@ body {
 }
 
 .conference-poster {
-    width: 100%;
-
-    border-radius: 20px;
-
-    margin-bottom: 30px;
-
     display: block;
-
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 24px auto;
+    border-radius: 12px;
+    object-fit: contain;
 }
 
 .conference-info {
