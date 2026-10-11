@@ -76,6 +76,40 @@ export default function RegistrationPage() {
                 «А я и дом мой будем служить Господу»
             </p>
 
+            <h2 className="section-title">
+                Участники
+            </h2>
+
+            <div className="participants-counter">
+                <button
+                    type="button"
+                    onClick={() =>
+                        setFamily((prev) => ({
+                            ...prev,
+                            adults: Math.max(1, prev.adults - 1),
+                        }))
+                    }
+                >
+                    ➖
+                </button>
+
+                <span>
+                    Взрослых: {family.adults}
+                </span>
+
+                <button
+                    type="button"
+                    onClick={() =>
+                        setFamily((prev) => ({
+                            ...prev,
+                            adults: prev.adults + 1,
+                        }))
+                    }
+                >
+                    ➕
+                </button>
+            </div>
+
             <div className="conference-info">
                 📅 17.10.2026 • 11:00
                 <br />
