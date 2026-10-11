@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 import "../styles/RegistrationPage.css";
 import { api } from "../services/api";
 
-import FatherForm from "../components/FatherForm";
-import MotherForm from "../components/MotherForm";
 import ChildrenForm from "../components/ChildrenForm";
 
 import { initialFamily } from "../data/initialFamily";
@@ -20,6 +18,14 @@ export default function RegistrationPage() {
 
     const handleSubmit = async () => {
         if (isSubmitting) return;
+
+        const confirmed = window.confirm(
+            "Вы уверены, что хотите зарегистрировать семью?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
 
         setIsSubmitting(true);
 
@@ -53,6 +59,7 @@ export default function RegistrationPage() {
             );
 
             alert(response.data.message);
+            setIsSubmitting(false);
 
             setFamily({
                 adults: 1,
