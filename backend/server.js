@@ -28,7 +28,7 @@ app.post("/api/families", async (req, res) => {
         children,
         adults
       )
-      VALUES ($1,$2,$3,$4,$5,$6,$7)
+      VALUES ($1,$2,$3,$4,$5,$6,$7, $8)
       `,
             [
                 "",
