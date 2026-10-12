@@ -50,10 +50,10 @@ app.post("/api/families", async (req, res) => {
                 "Спасибо! Ваша семья успешно зарегистрирована.",
         });
     } catch (error) {
-        console.error(error);
+        console.error("POST ERROR:", error);
 
         res.status(500).json({
-            message: "Ошибка сервера",
+            message: error.message,
         });
     }
 });
