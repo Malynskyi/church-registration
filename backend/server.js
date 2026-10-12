@@ -40,6 +40,8 @@ app.post("/api/families", async (req, res) => {
                 "",
 
                 JSON.stringify(family.children),
+
+                family.adults || 1,
             ]
         );
 
