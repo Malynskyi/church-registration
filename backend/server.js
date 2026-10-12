@@ -25,7 +25,8 @@ app.post("/api/families", async (req, res) => {
         mother_first_name,
         mother_last_name,
         mother_phone,
-        children
+        children,
+        adults
       )
       VALUES ($1,$2,$3,$4,$5,$6,$7)
       `,
