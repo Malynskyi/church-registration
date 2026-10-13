@@ -1,8 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import conferencePoster from "../assets/conference-poster.jpg";
-
-import { Link } from "react-router-dom";
 
 import "../styles/RegistrationPage.css";
 import { api } from "../services/api";
@@ -16,18 +14,23 @@ export default function RegistrationPage() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const submissionLock = useRef(false);
+
+    const idempotencyRequest = useRef(null);
+
     const [showConfirm, setShowConfirm] = useState(false);
 
     const [showSuccess, setShowSuccess] = useState(false);
 
     const handleSubmit = async () => {
-        if (isSubmitting) return;
+        if (submissionLock.current) return;
 
-
+        submissionLock.current = true;
         setIsSubmitting(true);
 
         if (family.children.some((child) => child === "")) {
             alert("Укажите возраст всех детей");
+            submissionLock.current = false;
             setIsSubmitting(false);
             return;
         }
@@ -50,13 +53,23 @@ export default function RegistrationPage() {
                 },
             };
 
-            const response = await api.post(
-                "/api/families",
-                familyToSend
-            );
+            const fingerprint = JSON.stringify(familyToSend);
+            if (idempotencyRequest.current?.fingerprint !== fingerprint) {
+                idempotencyRequest.current = {
+                    fingerprint,
+                    key: globalThis.crypto?.randomUUID?.() ||
+                        `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+                };
+            }
 
+            await api.post("/api/families", familyToSend, {
+                headers: {
+                    "Idempotency-Key": idempotencyRequest.current.key,
+                },
+            });
+
+            idempotencyRequest.current = null;
             setShowSuccess(true);
-            setIsSubmitting(false);
 
             setFamily({
                 adults: 1,
@@ -70,8 +83,18 @@ export default function RegistrationPage() {
             });
 
         } catch (error) {
+            const responseMessage = error.response?.data?.message;
+            const requestId = error.response?.data?.requestId;
+            const errorMessage = typeof responseMessage === "string"
+                ? responseMessage
+                : error.response
+                    ? `Не удалось сохранить регистрацию (HTTP ${error.response.status}). Попробуйте позже.`
+                    : "Не удалось связаться с сервером. Проверьте подключение и попробуйте ещё раз.";
+
+            alert(requestId ? `${errorMessage}\nКод ошибки: ${requestId}` : errorMessage);
+        } finally {
+            submissionLock.current = false;
             setIsSubmitting(false);
-            alert("Ошибка при отправке данных");
         }
     };
 
@@ -177,12 +200,13 @@ export default function RegistrationPage() {
 
                         <button
                             className="confirm-button"
+                            disabled={isSubmitting}
                             onClick={() => {
                                 setShowConfirm(false);
                                 handleSubmit();
                             }}
                         >
-                            Подтвердить
+                            {isSubmitting ? "Отправка..." : "Подтвердить"}
                         </button>
                     </div>
                 </div>
@@ -191,9 +215,10 @@ export default function RegistrationPage() {
 
             <button
                 className="submit-button"
+                disabled={isSubmitting}
                 onClick={() => setShowConfirm(true)}
             >
-                Зарегистрировать семью
+                {isSubmitting ? "Отправка..." : "Зарегистрировать семью"}
             </button>
 
 
