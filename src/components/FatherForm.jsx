@@ -1,11 +1,15 @@
+import { useLanguage } from "../i18n/LanguageContext";
+
 export default function FatherForm({ father, setFamily }) {
+    const { t } = useLanguage();
     return (
         <>
-            <h2 className="section-title">Отец</h2>
+            <h2 className="section-title">{t("father")}</h2>
 
             <input
                 className="form-input"
-                placeholder="Имя"
+                placeholder={t("firstName")}
+                aria-label={t("firstName")}
                 value={father.firstName}
                 onChange={(e) =>
                     setFamily((prev) => ({
@@ -20,7 +24,8 @@ export default function FatherForm({ father, setFamily }) {
 
             <input
                 className="form-input"
-                placeholder="Фамилия"
+                placeholder={t("lastName")}
+                aria-label={t("lastName")}
                 value={father.lastName}
                 onChange={(e) =>
                     setFamily((prev) => ({
@@ -35,7 +40,8 @@ export default function FatherForm({ father, setFamily }) {
 
             <input
                 className="form-input"
-                placeholder="Телефон (необязательно)"
+                placeholder={t("phone")}
+                aria-label={t("phone")}
                 value={father.phone}
                 onChange={(e) =>
                     setFamily((prev) => ({

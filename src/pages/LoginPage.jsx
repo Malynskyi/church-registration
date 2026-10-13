@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function LoginPage() {
+    const { t } = useLanguage();
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
@@ -10,20 +12,23 @@ export default function LoginPage() {
             localStorage.setItem("isAdmin", "true");
             navigate("/admin");
         } else {
-            alert("Неверный пароль");
+            alert(t("wrongPassword"));
         }
     };
 
     return (
-        <div className="registration-container">
+        <main className="registration-container login-container">
             <h1 className="registration-title">
-                Вход в админ-панель
+                {t("loginTitle")}
             </h1>
 
+            <label className="login-label" htmlFor="admin-password">{t("password")}</label>
             <input
+                id="admin-password"
                 className="form-input"
                 type="password"
-                placeholder="Пароль"
+                placeholder={t("password")}
+                aria-label={t("password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
@@ -32,8 +37,8 @@ export default function LoginPage() {
                 className="submit-button"
                 onClick={handleLogin}
             >
-                Войти
+                {t("login")}
             </button>
-        </div>
+        </main>
     );
 }

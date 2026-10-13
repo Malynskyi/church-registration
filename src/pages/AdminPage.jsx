@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { api } from "../services/api";
+import { useLanguage } from "../i18n/LanguageContext";
+import { languageLocales } from "../i18n/translations";
 
 export default function AdminPage() {
+    const { t, language } = useLanguage();
     const [families, setFamilies] = useState([]);
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(true);
@@ -37,7 +40,7 @@ export default function AdminPage() {
         } catch (err) {
             console.error("Ошибка загрузки семей:", err);
             setError(
-                "Не удалось загрузить семьи. Попробуйте обновить страницу."
+                "loadError"
             );
         } finally {
             setLoading(false);
@@ -52,7 +55,7 @@ export default function AdminPage() {
     }, [isAdmin]);
     const deleteFamily = async (id) => {
         const confirmed = window.confirm(
-            "Вы уверены, что хотите удалить семью?"
+            t("deleteConfirm")
         );
         if (!confirmed) {
             return;
@@ -63,7 +66,7 @@ export default function AdminPage() {
         } catch (err) {
             console.error("Ошибка удаления семьи:", err);
             setError(
-                "Не удалось удалить семью. Попробуйте ещё раз."
+                "deleteError"
             );
         }
     };
@@ -81,61 +84,72 @@ export default function AdminPage() {
             .includes(search.toLowerCase())
     );
     return (
-        <div className="registration-container">
-            <h1 className="registration-title">
-                Зарегистрированные семьи
+        <main className="registration-container admin-container">
+            <header className="dashboard-header">
+            <p className="conference-eyebrow">{t("conference")}</p>
+            <h1 id="admin-title" className="registration-title">
+                {t("adminTitle")}
             </h1>
+            </header>
+            <div className="admin-actions">
+            <Link to="/">← {t("back")}</Link>
             <button
-                className="submit-button"
+                className="cancel-button"
                 onClick={() => {
                     localStorage.removeItem("isAdmin");
                     window.location.href = "/";
                 }}
             >
-                Выйти
+                {t("logout")}
             </button>
-            <div
-                style={{
-                    border: "1px solid #ddd",
-                    borderRadius: "10px",
-                    padding: "15px",
-                    marginBottom: "20px",
-                    backgroundColor: "#f8f9fa",
-                }}
-            >
-                <h3>📊 Статистика</h3>
-                <p>Семей: {totalFamilies}</p>
-                <p>Взрослых: {totalAdults}</p>
-                <p>Детей: {totalChildren}</p>
-                <p>Всего людей: {totalPeople}</p>
+            </div>
+            <section className="statistics-section" aria-labelledby="statistics-title">
+                <h2 id="statistics-title" className="dashboard-section-title">{t("statistics")}</h2>
+                <div className="statistics-grid">
+                <p>{t("families")}<strong>{totalFamilies}</strong></p>
+                <p>{t("adults")}<strong>{totalAdults}</strong></p>
+                <p>{t("childrenCount")}<strong>{totalChildren}</strong></p>
+                <p>{t("total")}<strong>{totalPeople}</strong></p>
+                </div>
+                <label className="search-label" htmlFor="family-search">{t("search")}</label>
                 <input
+                    id="family-search"
                     className="form-input"
-                    placeholder="Поиск по фамилии"
+                    placeholder={t("search")}
+                    aria-label={t("search")}
                     value={search}
                     onChange={(e) =>
                         setSearch(e.target.value)
                     }
                 />
-            </div>
-            <Link to="/">
-                ← Вернуться к регистрации
-            </Link>
-            <br />
-            <br />
-            {loading && <p>Загрузка семей...</p>}
+            </section>
+            {loading && <p role="status">{t("loading")}</p>}
             {!loading && error && (
-                <p role="alert">{error}</p>
+                <p role="alert">{t(error)}</p>
             )}
             {!loading &&
                 !error &&
                 filteredFamilies.length === 0 && (
                     <p>
                         {search
-                            ? "По вашему запросу ничего не найдено."
-                            : "Пока нет зарегистрированных семей."}
+                            ? t("noResults")
+                            : t("noFamilies")}
                     </p>
                 )}
-            {!loading &&
+            {!loading && filteredFamilies.length > 0 && (
+                <table className="families-table" role="table" aria-labelledby="admin-title">
+                    <thead role="rowgroup">
+                        <tr role="row">
+                            <th scope="col" role="columnheader">{t("adults")}</th>
+                            <th scope="col" role="columnheader">{t("childrenCount")}</th>
+                            <th scope="col" role="columnheader">{t("total")}</th>
+                            <th scope="col" role="columnheader">{t("registeredAt")}</th>
+                            <th scope="col" role="columnheader">{t("ages")}</th>
+                            <th scope="col" role="columnheader">{t("actions")}</th>
+                        </tr>
+                    </thead>
+                    <tbody role="rowgroup">
+                    {
                 filteredFamilies.map((family) => {
                     const adults =
                         Number(family.adults) || 1;
@@ -145,59 +159,63 @@ export default function AdminPage() {
                         ? family.children
                         : [];
                     return (
-                        <div
+                        <tr
                             key={family.id}
-                            style={{
-                                border: "1px solid #ddd",
-                                borderRadius: "10px",
-                                padding: "20px",
-                                marginBottom: "20px",
-                            }}
+                            role="row"
                         >
-                            <p>
-                                👨 Взрослые: {adults}
-                            </p>
-                            <p>
-                                👶 Детей: {children.length}
-                            </p>
-                            <p>
-                                ✅ Всего участников:{" "}
-                                {adults + children.length}
-                            </p>
-                            <p>
-                                📅 Дата регистрации:{" "}
+                            <td role="cell" className="numeric-cell">
+                                <span className="mobile-cell-label" aria-hidden="true">{t("adults")}</span>
+                                <strong>{adults}</strong>
+                            </td>
+                            <td role="cell" className="numeric-cell">
+                                <span className="mobile-cell-label" aria-hidden="true">{t("childrenCount")}</span>
+                                <strong>{children.length}</strong>
+                            </td>
+                            <td role="cell" className="numeric-cell total-cell">
+                                <span className="mobile-cell-label" aria-hidden="true">{t("total")}</span>
+                                <strong>{adults + children.length}</strong>
+                            </td>
+                            <td role="cell" className="detail-cell">
+                                <span className="mobile-cell-label" aria-hidden="true">{t("registeredAt")}</span>
                                 {family.created_at
                                     ? new Date(
                                         family.created_at
-                                    ).toLocaleString()
+                                    ).toLocaleString(languageLocales[language])
                                     : "-"}
-                            </p>
-                            <p>Возраст детей:</p>
+                                    </td>
+                                    <td role="cell" className="detail-cell">
+                                    <span className="mobile-cell-label" aria-hidden="true">{t("ages")}</span>
                             {children.length > 0 ? (
                                 <ul>
                                     {children.map(
                                         (age, index) => (
                                             <li key={index}>
-                                                {age} лет
+                                                {t("years", { age })}
                                             </li>
                                         )
                                     )}
                                 </ul>
                             ) : (
-                                <p>Детей нет</p>
+                                <span>{t("noChildren")}</span>
                             )}
+                            </td>
+                            <td role="cell" className="action-cell">
                             <button
-                                className="submit-button"
+                                className="submit-button delete-button"
                                 onClick={() =>
                                     deleteFamily(family.id)
                                 }
                             >
-                                Удалить семью
+                                {t("deleteFamily")}
                             </button>
-                        </div>
+                            </td>
+                        </tr>
                     );
                 })}
-        </div>
+                    </tbody>
+                </table>
+            )}
+        </main>
     );
 
 }

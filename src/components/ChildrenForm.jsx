@@ -1,7 +1,10 @@
+import { useLanguage } from "../i18n/LanguageContext";
+
 export default function ChildrenForm({
     children,
     setFamily,
 }) {
+    const { t } = useLanguage();
     const changeChildrenCount = (newCount) => {
         if (newCount < 0) return;
         if (newCount > 15) return;
@@ -34,79 +37,66 @@ export default function ChildrenForm({
     };
 
     return (
-        <>
-            <h2 className="section-title">Дети</h2>
+        <section className="registration-section children-section" aria-labelledby="children-title">
+            <h2 id="children-title" className="section-title">{t("children")}</h2>
 
             <div className="info-box">
-                👶 Мы позаботимся о ваших детях во время конференции.
+                {t("childCare")}
                 <br />
-                Пожалуйста, укажите количество и возраст детей.
+                {t("childInstructions")}
             </div>
 
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "20px",
-                    marginBottom: "20px",
-                }}
-            >
+            <div className="participants-counter">
                 <button
                     type="button"
+                    aria-label={t("decreaseChildren")}
+                    title={t("decreaseChildren")}
                     onClick={() =>
                         changeChildrenCount(children.length - 1)
                     }
-                    style={{
-                        padding: "8px 15px",
-                        borderRadius: "10px",
-                        border: "1px solid #ccc",
-                        cursor: "pointer",
-                    }}
                 >
-                    ➖
+                    −
                 </button>
 
-                <strong
-                    style={{
-                        fontSize: "18px",
-                    }}
-                >
-                    Детей: {children.length}
-                </strong>
+                <span className="counter-value">
+                    <small>{t("childrenCount")}</small>
+                    <strong>{children.length}</strong>
+                </span>
 
                 <button
                     type="button"
+                    aria-label={t("increaseChildren")}
+                    title={t("increaseChildren")}
                     onClick={() =>
                         changeChildrenCount(children.length + 1)
                     }
-                    style={{
-                        padding: "8px 15px",
-                        borderRadius: "10px",
-                        border: "1px solid #ccc",
-                        cursor: "pointer",
-                    }}
                 >
-                    ➕
+                    +
                 </button>
             </div>
 
+            <div className="child-ages-grid">
             {children.length > 0 &&
                 children.map((child, index) => (
+                    <div className="child-age-field" key={index}>
+                    <label htmlFor={`child-age-${index}`}>{t("childAge", { number: index + 1 })}</label>
                     <input
-                        key={index}
+                        id={`child-age-${index}`}
                         className="form-input"
                         type="number"
                         min="0"
                         max="18"
                         required
-                        placeholder={`Возраст ребенка ${index + 1}`}
+                        placeholder={t("childAge", { number: index + 1 })}
+                        aria-label={t("childAge", { number: index + 1 })}
                         value={child}
                         onChange={(e) =>
                             updateChild(index, e.target.value)
                         }
                     />
+                    </div>
                 ))}
-        </>
+                </div>
+            </section>
     );
 }

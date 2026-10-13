@@ -6,10 +6,14 @@ import "../styles/RegistrationPage.css";
 import { api } from "../services/api";
 
 import ChildrenForm from "../components/ChildrenForm";
+import Modal from "../components/Modal";
 
 import { initialFamily } from "../data/initialFamily";
+import { useLanguage } from "../i18n/LanguageContext";
+import { serverMessageKeys } from "../i18n/translations";
 
 export default function RegistrationPage() {
+    const { t } = useLanguage();
     const [family, setFamily] = useState(initialFamily);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,6 +21,7 @@ export default function RegistrationPage() {
     const submissionLock = useRef(false);
 
     const idempotencyRequest = useRef(null);
+    const registrationButtonRef = useRef(null);
 
     const [showConfirm, setShowConfirm] = useState(false);
 
@@ -29,7 +34,7 @@ export default function RegistrationPage() {
         setIsSubmitting(true);
 
         if (family.children.some((child) => child === "")) {
-            alert("Укажите возраст всех детей");
+            alert(t("missingAges"));
             submissionLock.current = false;
             setIsSubmitting(false);
             return;
@@ -86,12 +91,12 @@ export default function RegistrationPage() {
             const responseMessage = error.response?.data?.message;
             const requestId = error.response?.data?.requestId;
             const errorMessage = typeof responseMessage === "string"
-                ? responseMessage
+                ? t(serverMessageKeys[responseMessage] || "saveError")
                 : error.response
-                    ? `Не удалось сохранить регистрацию (HTTP ${error.response.status}). Попробуйте позже.`
-                    : "Не удалось связаться с сервером. Проверьте подключение и попробуйте ещё раз.";
+                    ? t("httpError", { status: error.response.status })
+                    : t("networkError");
 
-            alert(requestId ? `${errorMessage}\nКод ошибки: ${requestId}` : errorMessage);
+            alert(requestId ? `${errorMessage}\n${t("errorCode")}: ${requestId}` : errorMessage);
         } finally {
             submissionLock.current = false;
             setIsSubmitting(false);
@@ -99,24 +104,47 @@ export default function RegistrationPage() {
     };
 
     return (
-        <div className="registration-container">
-
-
+        <main className="registration-container">
+            <header className="registration-header">
+            <p className="conference-eyebrow">{t("conference")}</p>
             <h1 className="registration-title">
-                Регистрация на семейную конференцию
+                {t("title")}
             </h1>
 
             <p className="conference-verse">
-                «А я и дом мой будем служить Господу»
+                {t("verse")}
             </p>
 
-            <h2 className="section-title">
-                Участники
+            <div className="conference-info">
+                <div>
+                    <span className="event-label">{t("date")}</span>
+                    <time dateTime="2026-10-17T11:00">17.10.2026 · 11:00</time>
+                </div>
+                <div>
+                    <span className="event-label">{t("location")}</span>
+                    <a
+                        href="https://www.google.com/maps/search/?api=1&query=Zieherser+Weg+14%2C+Fulda%2C+Germany"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="address-link"
+                    >
+                        Fulda, Zieherser Weg 14
+                    </a>
+                </div>
+            </div>
+            <a href="#poster" className="poster-link">{t("details")} ↓</a>
+            </header>
+
+            <section className="registration-section adults-section" aria-labelledby="participants-title">
+            <h2 id="participants-title" className="section-title">
+                {t("participants")}
             </h2>
 
             <div className="participants-counter">
                 <button
                     type="button"
+                    aria-label={t("decreaseAdults")}
+                    title={t("decreaseAdults")}
                     onClick={() =>
                         setFamily((prev) => ({
                             ...prev,
@@ -124,15 +152,18 @@ export default function RegistrationPage() {
                         }))
                     }
                 >
-                    ➖
+                    −
                 </button>
 
-                <span>
-                    Взрослых: {family.adults}
+                <span className="counter-value">
+                    <small>{t("adults")}</small>
+                    <strong>{family.adults}</strong>
                 </span>
 
                 <button
                     type="button"
+                    aria-label={t("increaseAdults")}
+                    title={t("increaseAdults")}
                     onClick={() =>
                         setFamily((prev) => ({
                             ...prev,
@@ -140,65 +171,43 @@ export default function RegistrationPage() {
                         }))
                     }
                 >
-                    ➕
+                    +
                 </button>
             </div>
-
-            <div className="conference-info">
-                📅 17.10.2026 • 11:00
-                <br />
-                <a
-                    href="https://www.google.com/maps/search/?api=1&query=Zieherser+Weg+14%2C+Fulda%2C+Germany"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="address-link"
-                >
-                    📍 Fulda, Zieherser Weg 14
-                </a>
-            </div>
-
-            <a href="#poster">
-                📖 Подробнее о конференции
-            </a>
-
+            </section>
 
             <ChildrenForm
                 children={family.children}
                 setFamily={setFamily}
             />
 
-            <div className="total-participants">
-                ✅ Всего участников:{" "}
-                {family.adults + family.children.length}
+            <div className="total-participants" aria-live="polite">
+                <span>{t("total")}</span>
+                <strong>{family.adults + family.children.length}</strong>
             </div>
 
 
 
             {showConfirm && (
-                <div className="confirm-card">
-                    <h3>✅ Подтвердить регистрацию</h3>
-
-                    <p>
-                        Взрослые: {family.adults}
-                    </p>
-
-                    <p>
-                        Дети: {family.children.length}
-                    </p>
-
-                    <p>
-                        Всего участников: {family.adults + family.children.length}
-                    </p>
+                <Modal titleId="confirmation-title" title={t("confirmTitle")} returnFocusRef={registrationButtonRef}>
+                    <dl className="modal-summary">
+                        <div><dt>{t("adults")}</dt><dd>{family.adults}</dd></div>
+                        <div><dt>{t("childrenCount")}</dt><dd>{family.children.length}</dd></div>
+                        <div className="modal-summary-total"><dt>{t("total")}</dt><dd>{family.adults + family.children.length}</dd></div>
+                    </dl>
 
                     <div className="modal-buttons">
                         <button
+                            type="button"
                             className="cancel-button"
+                            data-modal-initial-focus
                             onClick={() => setShowConfirm(false)}
                         >
-                            Отмена
+                            {t("cancel")}
                         </button>
 
                         <button
+                            type="button"
                             className="confirm-button"
                             disabled={isSubmitting}
                             onClick={() => {
@@ -206,54 +215,53 @@ export default function RegistrationPage() {
                                 handleSubmit();
                             }}
                         >
-                            {isSubmitting ? "Отправка..." : "Подтвердить"}
+                            {isSubmitting ? t("sending") : t("confirm")}
                         </button>
                     </div>
-                </div>
+                </Modal>
             )}
 
 
             <button
                 className="submit-button"
+                ref={registrationButtonRef}
                 disabled={isSubmitting}
                 onClick={() => setShowConfirm(true)}
             >
-                {isSubmitting ? "Отправка..." : "Зарегистрировать семью"}
+                {isSubmitting ? t("sending") : t("register")}
             </button>
 
 
             {showSuccess && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <h2>✅ Спасибо!</h2>
-
-                        <p>
-                            Ваша семья успешно зарегистрирована.
+                <Modal titleId="success-title" descriptionId="success-message" title={t("thanks")} success returnFocusRef={registrationButtonRef}>
+                        <p id="success-message" className="modal-message">
+                            {t("success")}
                         </p>
 
                         <button
+                            type="button"
                             className="confirm-button"
+                            data-modal-initial-focus
                             onClick={() => setShowSuccess(false)}
                         >
-                            Отлично
+                            {t("done")}
                         </button>
-                    </div>
-                </div>
+                </Modal>
             )}
 
             <h2
                 id="poster"
                 className="poster-title">
-                Подробнее о конференции
+                {t("details")}
             </h2>
 
             <img
                 src={conferencePoster}
-                alt="Постер семейной конференции"
+                alt={t("posterAlt")}
                 className="conference-poster"
             />
 
 
-        </div >
+        </main>
     );
 }
