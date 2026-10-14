@@ -102,6 +102,8 @@ export default function AdminPage() {
             total: t("total"),
             ages: t("ages"),
             registeredAt: t("registeredAt"),
+            notSpecified: t("notSpecified"),
+            participantsUnknown: t("participantsUnknown"),
         });
         const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
         const link = document.createElement("a");
@@ -113,7 +115,8 @@ export default function AdminPage() {
 
     const statistics = [
         { key: "families", value: metrics.totalFamilies, icon: "families" },
-        { key: "adults", value: metrics.totalAdults, icon: "adults" },
+        { key: "knownAdultsPartial", value: metrics.knownAdultTotal, icon: "adults" },
+        { key: "familiesWithUnknownAdults", value: metrics.unknownAdultFamilyCount, icon: "adults" },
         { key: "childrenCount", value: metrics.totalChildren, icon: "children" },
         { key: "total", value: metrics.totalParticipants, icon: "total" },
     ];
@@ -145,7 +148,11 @@ export default function AdminPage() {
                         <article className="statistics-card" key={key}>
                             <MetricIcon kind={icon} />
                             <span>{t(key)}</span>
-                            <strong>{loading || error ? t("metricUnavailable") : value ?? t("metricUnavailable")}</strong>
+                            <strong>{loading || error
+                                ? t("metricUnavailable")
+                                : key === "total" && value === null
+                                    ? t("participantsUnknown")
+                                    : value ?? t("metricUnavailable")}</strong>
                         </article>
                     ))}
                 </div>
@@ -261,7 +268,7 @@ export default function AdminPage() {
                             </td>
                             <td role="cell" className="numeric-cell">
                                 <span className="mobile-cell-label" aria-hidden="true">{t("adults")}</span>
-                                <strong>{adults ?? t("metricUnavailable")}</strong>
+                                <strong>{adults ?? t("notSpecified")}</strong>
                             </td>
                             <td role="cell" className="numeric-cell">
                                 <span className="mobile-cell-label" aria-hidden="true">{t("childrenCount")}</span>
@@ -270,7 +277,7 @@ export default function AdminPage() {
                             <td role="cell" className="numeric-cell total-cell">
                                 <span className="mobile-cell-label" aria-hidden="true">{t("total")}</span>
                                 <strong>{adults === null || !Array.isArray(family?.children)
-                                    ? t("metricUnavailable")
+                                    ? t("participantsUnknown")
                                     : adults + children.length}</strong>
                             </td>
                             <td role="cell" className="detail-cell">

@@ -32,6 +32,8 @@ export function getRegistrationMetrics(families) {
         return {
             totalFamilies: null,
             totalAdults: null,
+            knownAdultTotal: null,
+            unknownAdultFamilyCount: null,
             totalChildren: null,
             totalParticipants: null,
             invalidFamilyCount: 0,
@@ -41,6 +43,7 @@ export function getRegistrationMetrics(families) {
     }
 
     let adultTotal = 0;
+    let unknownAdultFamilyCount = 0;
     let childTotal = 0;
     let adultsComplete = true;
     let childrenComplete = true;
@@ -53,8 +56,12 @@ export function getRegistrationMetrics(families) {
         const hasChildren = Array.isArray(family?.children);
         let familyIsInvalid = adults === null || !hasChildren;
 
-        if (adults === null) adultsComplete = false;
-        else adultTotal += adults;
+        if (adults === null) {
+            adultsComplete = false;
+            unknownAdultFamilyCount += 1;
+        } else {
+            adultTotal += adults;
+        }
 
         if (!hasChildren) {
             childrenComplete = false;
@@ -81,6 +88,8 @@ export function getRegistrationMetrics(families) {
     return {
         totalFamilies: families.length,
         totalAdults,
+        knownAdultTotal: adultTotal,
+        unknownAdultFamilyCount,
         totalChildren,
         totalParticipants: totalAdults === null || totalChildren === null
             ? null
@@ -174,12 +183,14 @@ export function createFamiliesCsv(families, labels) {
     const rows = families.map((family) => {
         const adults = parseNonnegativeInteger(family?.adults);
         const children = Array.isArray(family?.children) ? family.children : null;
-        const childAges = children?.map((age) => parseChildAge(age) ?? "").join("; ") ?? "";
+        const childAges = children?.map((age) => parseChildAge(age) ?? labels.notSpecified).join("; ") ?? labels.notSpecified;
         const values = {
             id: family?.id,
-            adults: adults ?? "",
-            childrenCount: children?.length ?? "",
-            total: adults !== null && children ? adults + children.length : "",
+            adults: adults ?? labels.notSpecified,
+            childrenCount: children?.length ?? labels.notSpecified,
+            total: adults !== null && children
+                ? adults + children.length
+                : labels.participantsUnknown ?? labels.notSpecified,
             ages: childAges,
             registeredAt: hasValidDate(family?.created_at) ? family.created_at : "",
         };

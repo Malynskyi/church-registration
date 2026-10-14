@@ -15,10 +15,30 @@ test("registration metrics count zero adults and every valid child age once", ()
 
     assert.equal(metrics.totalFamilies, 2);
     assert.equal(metrics.totalAdults, 2);
+    assert.equal(metrics.knownAdultTotal, 2);
+    assert.equal(metrics.unknownAdultFamilyCount, 0);
     assert.equal(metrics.totalChildren, 11);
     assert.equal(metrics.totalParticipants, 13);
     assert.deepEqual(metrics.ageDistribution.map(({ count }) => count), [2, 2, 2, 2, 2, 1]);
     assert.equal(metrics.ageDistribution.reduce((total, group) => total + group.count, 0), 11);
+});
+
+test("known adult total stays partial when null or invalid counts coexist with zero", () => {
+    const metrics = getRegistrationMetrics([
+        { adults: 0, children: [] },
+        { adults: null, children: ["3", "8"] },
+        { adults: "2", children: ["5"] },
+        { adults: "invalid", children: ["x"] },
+    ]);
+
+    assert.equal(metrics.totalFamilies, 4);
+    assert.equal(metrics.knownAdultTotal, 2);
+    assert.equal(metrics.unknownAdultFamilyCount, 2);
+    assert.equal(metrics.totalAdults, null);
+    assert.equal(metrics.totalChildren, 4);
+    assert.equal(metrics.totalParticipants, null);
+    assert.equal(metrics.invalidFamilyCount, 2);
+    assert.equal(metrics.unclassifiedAgeCount, 1);
 });
 
 test("empty and malformed registration data never invents counts or ages", () => {
@@ -53,17 +73,22 @@ test("CSV is UTF-8-ready, quotes special fields, includes available fields, and 
     const csv = createFamiliesCsv([
         {
             id: '=HYPERLINK("https://invalid")',
-            adults: 2,
+            adults: null,
             children: ["7"],
             created_at: "2026-10-01T10:00:00Z",
         },
+        { id: 2, adults: 0, children: [] },
+        { id: 3, adults: "invalid", children: ["x"] },
     ], {
         id: "ID", adults: "Adults", children: "Children", total: "Total",
         ages: 'Ages,\n"years"', registeredAt: "Registered at",
+        notSpecified: "Nicht angegeben", participantsUnknown: "Unbekannt",
     });
 
     assert.ok(csv.startsWith("\uFEFF"));
     assert.match(csv, /"'=?HYPERLINK\(""https:\/\/invalid""\)"/);
     assert.match(csv, /"Ages,\n""years"""/);
     assert.match(csv, /"2026-10-01T10:00:00Z"/);
+    assert.match(csv, /"2","0","0","0","",""/);
+    assert.match(csv, /"3","Nicht angegeben","1","Unbekannt","Nicht angegeben",""/);
 });
