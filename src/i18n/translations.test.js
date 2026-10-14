@@ -73,6 +73,22 @@ test("footer content is translated in all supported languages", () => {
     }
 });
 
+test("unknown and partial-adult dashboard labels are localized in all languages", () => {
+    assert.deepEqual(Object.fromEntries(Object.keys(translations).map((language) => [
+        language,
+        [
+            translations[language].knownAdultsPartial,
+            translations[language].familiesWithUnknownAdults,
+            translations[language].participantsUnknown,
+            translations[language].notSpecified,
+        ],
+    ])), {
+        uk: ["Відомі дорослі (часткова сума)", "Сімей із невідомою кількістю дорослих", "Невідомо", "Не вказано"],
+        de: ["Bekannte Erwachsene (Teilsumme)", "Familien mit unbekannter Erwachsenenzahl", "Unbekannt", "Nicht angegeben"],
+        ru: ["Известные взрослые (частичная сумма)", "Семей с неизвестным числом взрослых", "Неизвестно", "Не указано"],
+    });
+});
+
 test("all known registration server errors have translations in all three languages", () => {
     for (const key of Object.values(serverMessageKeys)) {
         for (const language of ["uk", "de", "ru"]) {
