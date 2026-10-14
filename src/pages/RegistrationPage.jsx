@@ -6,7 +6,9 @@ import "../styles/RegistrationPage.css";
 import { api } from "../services/api";
 
 import ChildrenForm from "../components/ChildrenForm";
+import ConferenceCountdown from "../components/ConferenceCountdown";
 import Modal from "../components/Modal";
+import SiteFooter from "../components/SiteFooter";
 
 import { initialFamily } from "../data/initialFamily";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -26,6 +28,7 @@ export default function RegistrationPage() {
     const [showConfirm, setShowConfirm] = useState(false);
 
     const [showSuccess, setShowSuccess] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSubmit = async () => {
         if (submissionLock.current) return;
@@ -34,7 +37,7 @@ export default function RegistrationPage() {
         setIsSubmitting(true);
 
         if (family.children.some((child) => child === "")) {
-            alert(t("missingAges"));
+            setErrorMessage(t("missingAges"));
             submissionLock.current = false;
             setIsSubmitting(false);
             return;
@@ -96,7 +99,7 @@ export default function RegistrationPage() {
                     ? t("httpError", { status: error.response.status })
                     : t("networkError");
 
-            alert(requestId ? `${errorMessage}\n${t("errorCode")}: ${requestId}` : errorMessage);
+            setErrorMessage(requestId ? `${errorMessage}\n${t("errorCode")}: ${requestId}` : errorMessage);
         } finally {
             submissionLock.current = false;
             setIsSubmitting(false);
@@ -104,6 +107,7 @@ export default function RegistrationPage() {
     };
 
     return (
+        <>
         <main className="registration-container">
             <header className="registration-header">
             <p className="conference-eyebrow">{t("conference")}</p>
@@ -115,8 +119,8 @@ export default function RegistrationPage() {
                 {t("verse")}
             </p>
 
-            <div className="conference-info">
-                <div>
+            <div className="conference-info" id="conference-info">
+                <div id="conference-location">
                     <span className="event-label">{t("date")}</span>
                     <time dateTime="2026-10-17T11:00">17.10.2026 · 11:00</time>
                 </div>
@@ -134,6 +138,8 @@ export default function RegistrationPage() {
             </div>
             <a href="#poster" className="poster-link">{t("details")} ↓</a>
             </header>
+
+            <ConferenceCountdown />
 
             <section className="registration-section adults-section" aria-labelledby="participants-title">
             <h2 id="participants-title" className="section-title">
@@ -249,6 +255,30 @@ export default function RegistrationPage() {
                 </Modal>
             )}
 
+            {errorMessage && (
+                <Modal
+                    titleId="registration-error-title"
+                    descriptionId="registration-error-message"
+                    title={t("errorTitle")}
+                    error
+                    returnFocusRef={registrationButtonRef}
+                >
+                    <p id="registration-error-message" className="modal-message">
+                        {errorMessage}
+                    </p>
+                    <div className="modal-buttons">
+                        <button
+                            type="button"
+                            className="confirm-button"
+                            data-modal-initial-focus
+                            onClick={() => setErrorMessage("")}
+                        >
+                            {t("done")}
+                        </button>
+                    </div>
+                </Modal>
+            )}
+
             <h2
                 id="poster"
                 className="poster-title">
@@ -261,7 +291,8 @@ export default function RegistrationPage() {
                 className="conference-poster"
             />
 
-
         </main>
+        <SiteFooter />
+        </>
     );
 }

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { openModal } from "./modalLifecycle";
 
-export default function Modal({ titleId, descriptionId, title, children, success = false, returnFocusRef }) {
+export default function Modal({ titleId, descriptionId, title, children, success = false, error = false, returnFocusRef }) {
     const dialogRef = useRef(null);
 
     useEffect(() => openModal(dialogRef.current, document, window, returnFocusRef?.current), [returnFocusRef]);
@@ -12,12 +12,13 @@ export default function Modal({ titleId, descriptionId, title, children, success
             ref={dialogRef}
             className="modal-overlay"
             aria-modal="true"
+            role={error ? "alertdialog" : undefined}
             aria-labelledby={titleId}
             aria-describedby={descriptionId}
             onCancel={(event) => event.preventDefault()}
         >
-            <div className={`modal${success ? " modal-success" : ""}`}>
-                <div className="modal-icon" aria-hidden="true">✓</div>
+            <div className={`modal${success ? " modal-success" : ""}${error ? " modal-error" : ""}`}>
+                <div className="modal-icon" aria-hidden="true">{error ? "!" : "✓"}</div>
                 <h2 id={titleId}>{title}</h2>
                 {children}
             </div>

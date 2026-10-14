@@ -26,6 +26,53 @@ test("translation interpolates counts and HTTP status without changing values", 
     assert.equal(translate("unknown", "language"), translations.uk.language);
 });
 
+test("registration and login error modal titles are translated in all supported languages", () => {
+    assert.deepEqual(Object.fromEntries(Object.keys(translations).map((language) => [
+        language,
+        [translations[language].errorTitle, translations[language].loginErrorTitle],
+    ])), {
+        uk: ["Перевірте введені дані", "Не вдалося увійти"],
+        de: ["Bitte prüfen Sie Ihre Eingaben", "Anmeldung fehlgeschlagen"],
+        ru: ["Проверьте введённые данные", "Не удалось войти"],
+    });
+});
+
+test("admin login title, subtitle, and password visibility labels are localized", () => {
+    assert.deepEqual(Object.fromEntries(Object.keys(translations).map((language) => [
+        language,
+        [
+            translations[language].loginTitle,
+            translations[language].loginSubtitle,
+            translations[language].showPassword,
+            translations[language].hidePassword,
+        ],
+    ])), {
+        uk: ["Вхід адміністратора", "Керуйте реєстраціями та даними конференції.", "Показати пароль", "Приховати пароль"],
+        de: ["Admin-Anmeldung", "Verwalten Sie Anmeldungen und Konferenzdaten.", "Passwort anzeigen", "Passwort verbergen"],
+        ru: ["Вход администратора", "Управляйте регистрациями и данными конференции.", "Показать пароль", "Скрыть пароль"],
+    });
+});
+
+test("footer content is translated in all supported languages", () => {
+    const footerKeys = [
+        "footerEventTitle", "footerWelcome", "footerNavigation", "footerConferenceInfo",
+        "footerRegistration", "footerLocation", "footerSupport", "footerSupportMessage",
+        "footerCopyright", "contacts", "backToTop",
+    ];
+    const expectedLanguages = {
+        uk: ["Сімейна конференція 2026", "Тепла зустріч для всієї церковної родини.", "Навігація", "Інформація про конференцію", "Реєстрація", "Місце проведення", "Потрібна допомога?", "Напишіть нам, якщо у вас є запитання щодо реєстрації.", "Сімейна конференція", "Контакти", "На початок"],
+        de: ["Familienkonferenz 2026", "Ein herzliches Treffen für die ganze Gemeindefamilie.", "Navigation", "Konferenzinformationen", "Anmeldung", "Veranstaltungsort", "Brauchen Sie Hilfe?", "Schreiben Sie uns bei Fragen zur Anmeldung.", "Familienkonferenz", "Kontakt", "Nach oben"],
+        ru: ["Семейная конференция 2026", "Тёплая встреча для всей церковной семьи.", "Навигация", "Информация о конференции", "Регистрация", "Место проведения", "Нужна помощь?", "Напишите нам, если у вас есть вопросы о регистрации.", "Семейная конференция", "Контакты", "Наверх"],
+    };
+
+    for (const [language, expected] of Object.entries(expectedLanguages)) {
+        assert.deepEqual(
+            footerKeys.map((key) => translate(language, key, { year: "2026" })),
+            expected,
+        );
+    }
+});
+
 test("all known registration server errors have translations in all three languages", () => {
     for (const key of Object.values(serverMessageKeys)) {
         for (const language of ["uk", "de", "ru"]) {
